@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+/* =========================
+   CSS Variables for Theme
+   ========================= */
+:root {
+  /* Light mode colors */
+  --background: #38044c; /* softer blue */
+  --foreground: #072548; /* dark navy text */
+
+  --accent: #2563eb;     /* Tailwind blue-600 */
+  --muted: #000306;      /* Tailwind slate-500 */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #010709; /* dark navy */
+    --foreground: #265b91; /* light text */
+    --accent: #0d2d55;     /* Tailwind sky-400 */
+    --muted: #041020;      /* slate-400 */
+  }
+}
+
+/* =========================
+   Tailwind Theme Override
+   ========================= */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-accent: var(--accent);
+  --color-muted: var(--muted);
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+}
+
+/* =========================
+   Global Styles
+   ========================= */
+body {
+  @apply bg-background text-foreground font-sans antialiased;
+}
+
+/* Utility classes */
+h1, h2, h3, h4, h5, h6 {
+  @apply font-bold text-foreground;
+}
+
+a {
+  @apply text-accent hover:underline;
+}
