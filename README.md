@@ -127,7 +127,7 @@ Node.js (v18+)
 npm or yarn
 
 Installation
-git clone https://github.com/your-username/tvaran.git
+git clone https://github.com/anoopcodehack/Tvaran-AI.git
 cd tvaran
 npm install
 
