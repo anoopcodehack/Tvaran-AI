@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { FiAward, FiSearch, FiFilter, FiTrendingUp, FiClock } from "react-icons/fi";
 import { motion } from "framer-motion";
+import type { ReactNode, ChangeEvent } from "react";
 
 interface Achievement {
   id: number;
@@ -13,9 +14,11 @@ interface Achievement {
   progress: number;
 }
 
+type CategoryFilter = "All" | "Personal" | "Team" | "Milestone";
+
 export default function AchievementPage() {
-  const [search, setSearch] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState<"All" | "Personal" | "Team" | "Milestone">("All");
+  const [search, setSearch] = useState<string>("");
+  const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>("All");
 
   const achievements: Achievement[] = [
     {
@@ -23,7 +26,8 @@ export default function AchievementPage() {
       title: "Completed First Project",
       date: "2025-01-15",
       category: "Personal",
-      description: "Successfully delivered the first major project, showcasing strong problem-solving and time management skills.",
+      description:
+        "Successfully delivered the first major project, showcasing strong problem-solving and time management skills.",
       progress: 100,
     },
     {
@@ -31,7 +35,8 @@ export default function AchievementPage() {
       title: "100+ Users Reached",
       date: "2025-03-10",
       category: "Milestone",
-      description: "Achieved 100+ active users milestone, validating the project's impact and user adoption.",
+      description:
+        "Achieved 100+ active users milestone, validating the project's impact and user adoption.",
       progress: 75,
     },
     {
@@ -39,7 +44,8 @@ export default function AchievementPage() {
       title: "Team Collaboration Award",
       date: "2025-06-20",
       category: "Team",
-      description: "Recognized for outstanding collaboration and teamwork on a cross-functional innovation project.",
+      description:
+        "Recognized for outstanding collaboration and teamwork on a cross-functional innovation project.",
       progress: 100,
     },
     {
@@ -47,7 +53,8 @@ export default function AchievementPage() {
       title: "Top Performer of the Month",
       date: "2025-08-05",
       category: "Personal",
-      description: "Awarded top performer for exceeding targets and demonstrating leadership in project delivery.",
+      description:
+        "Awarded top performer for exceeding targets and demonstrating leadership in project delivery.",
       progress: 50,
     },
     {
@@ -55,7 +62,8 @@ export default function AchievementPage() {
       title: "Launched New Feature",
       date: "2025-09-01",
       category: "Milestone",
-      description: "Successfully launched a new feature that enhanced platform engagement by 40%.",
+      description:
+        "Successfully launched a new feature that enhanced platform engagement by 40%.",
       progress: 90,
     },
   ];
@@ -73,6 +81,10 @@ export default function AchievementPage() {
   const averageProgress = Math.round(
     achievements.reduce((acc, cur) => acc + cur.progress, 0) / total
   );
+
+  const handleCategoryChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setCategoryFilter(e.target.value as CategoryFilter);
+  };
 
   return (
     <div className="p-8 space-y-8">
@@ -121,7 +133,7 @@ export default function AchievementPage() {
           <FiFilter className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-400" />
           <select
             value={categoryFilter}
-            onChange={(e) => setCategoryFilter(e.target.value as any)}
+            onChange={handleCategoryChange}
             className="pl-10 pr-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition"
           >
             <option value="All">All Categories</option>
@@ -150,7 +162,9 @@ export default function AchievementPage() {
           >
             <h2 className="text-xl font-bold mb-2">{achievement.title}</h2>
             <p className="text-sm text-gray-500 mb-2">{achievement.date}</p>
-            <p className="text-gray-600 text-sm mb-4">{achievement.description}</p>
+            <p className="text-gray-600 text-sm mb-4">
+              {achievement.description}
+            </p>
 
             <span
               className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${
@@ -168,13 +182,15 @@ export default function AchievementPage() {
             <div className="mt-5">
               <div className="flex justify-between text-sm mb-1">
                 <span className="text-gray-600">Progress</span>
-                <span className="text-gray-800 font-semibold">{achievement.progress}%</span>
+                <span className="text-gray-800 font-semibold">
+                  {achievement.progress}%
+                </span>
               </div>
               <div className="w-full bg-gray-200 h-3 rounded-full overflow-hidden">
                 <div
                   className="h-3 bg-yellow-500 rounded-full transition-all duration-500"
                   style={{ width: `${achievement.progress}%` }}
-                ></div>
+                />
               </div>
             </div>
           </motion.div>
@@ -182,13 +198,23 @@ export default function AchievementPage() {
       </div>
 
       {filteredAchievements.length === 0 && (
-        <p className="text-center text-gray-500 mt-10">No achievements found 🚀</p>
+        <p className="text-center text-gray-500 mt-10">
+          No achievements found 🚀
+        </p>
       )}
     </div>
   );
 }
 
-function SummaryCard({ icon, label, value }: { icon: any; label: string; value: string | number }) {
+function SummaryCard({
+  icon,
+  label,
+  value,
+}: {
+  icon: ReactNode;
+  label: string;
+  value: string | number;
+}) {
   return (
     <motion.div
       whileHover={{ scale: 1.05 }}
