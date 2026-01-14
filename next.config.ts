@@ -1,7 +1,8 @@
-/** @type {import('next-i18next').UserConfig} */
-module.exports = {
-  i18n: {
-    defaultLocale: 'en',    // default language
-    locales: ['en', 'hi', 'ta', 'bn', 'te', 'mr'], // add all Indian languages you want
-  },
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,
+  // Remove the i18n block completely
+  // i18n: { locales: ['en', 'fr'], defaultLocale: 'en' },
 };
+
+export default nextConfig;
