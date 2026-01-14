@@ -1,40 +1,197 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+🚀 TVARAN – AI-Powered Athletic Performance Platform
 
-## Getting Started
+TVARAN is a modern web platform that leverages AI and computer vision to help athletes assess skills, track achievements, and unlock their full potential through data-driven insights.
 
-First, run the development server:
+Built with Next.js (App Router), TypeScript, and Framer Motion, TVARAN delivers a clean, scalable, and production-ready dashboard experience.
 
-```bash
+🌐 Live Preview
+
+Add your deployed link here (Vercel / Netlify)
+Example:
+🔗 https://tvaran.vercel.app
+
+🧠 Key Features
+
+AI-Driven Skill Assessment
+Uses computer vision concepts to evaluate athletic performance remotely.
+
+Interactive Dashboard
+Centralized dashboard for tracking progress, achievements, and reports.
+
+Achievements Management
+
+Categorized achievements (Personal, Team, Milestone)
+
+Progress tracking with visual indicators
+
+Search and filter functionality
+
+Smooth Animations
+Powered by Framer Motion for modern UI transitions.
+
+Authentication Flow
+
+Login
+
+Signup
+
+Logout
+
+Responsive UI
+Optimized for desktop and mobile screens.
+
+🏗️ Tech Stack
+
+Frontend
+
+Next.js 14 (App Router)
+
+React
+
+TypeScript
+
+Tailwind CSS
+
+Framer Motion
+
+React Icons
+
+Tooling
+
+ESLint
+
+Postman (API testing)
+
+VS Code
+
+📁 Project Structure
+src/
+└── app/
+    ├── dashboard/
+    │   ├── achievement/
+    │   │   └── page.tsx
+    │   ├── add-item/
+    │   ├── home/
+    │   ├── profile/
+    │   ├── report/
+    │   ├── setting/
+    │   └── logout/
+    ├── login/
+    ├── signup/
+    ├── layout.tsx
+    ├── page.tsx
+public/
+globals.css
+next.config.ts
+package.json
+
+📊 Achievements Module (Core Highlight)
+
+The Achievements page allows users to:
+
+View progress-based achievements
+
+Filter by category:
+
+Personal
+
+Team
+
+Milestone
+
+Search achievements in real time
+
+Visualize completion progress
+
+Experience smooth UI animations
+
+This module demonstrates:
+
+Strong TypeScript typing
+
+Component-driven UI logic
+
+Clean state management
+
+Scalable dashboard design
+
+🖼️ Screenshots
+Landing Page
+
+Dashboard – Achievements
+
+⚠️ Don’t skip screenshots. Repos without visuals look unfinished.
+
+⚙️ Getting Started
+Prerequisites
+
+Node.js (v18+)
+
+npm or yarn
+
+Installation
+git clone https://github.com/your-username/tvaran.git
+cd tvaran
+npm install
+
+Run Locally
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Visit:
+👉 http://localhost:3000
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+🧪 Development Status
 
-## Learn More
+ UI & Dashboard Layout
 
-To learn more about Next.js, take a look at the following resources:
+ Achievements Module
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+ Animations & UX
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+ Backend Integration
 
-## Deploy on Vercel
+ AI Model Integration
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+ User Data Persistence
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-"# html.demo" 
-"# https-github.com-anoopcodehack-html.demo" 
-"# https-github.com-anoopcodehack-html.demo" 
-"# https-github.com-anoopcodehack-html.demo" 
+🧭 Roadmap
+
+Integrate AI performance analysis
+
+Backend API (Node / FastAPI)
+
+User analytics & reports
+
+Cloud-based video processing
+
+Admin dashboard
+
+🤝 Contributing
+
+Contributions are welcome.
+
+Fork the repository
+
+Create a new branch
+
+git checkout -b feature/your-feature
+
+
+Commit changes
+
+Open a Pull Request
+
+📜 License
+
+This project is licensed under the MIT License.
+
+👤 Author
+
+Anoop A
+📌 Full Stack Developer
+📌 Focused on AI-powered web platforms
+
+🔗 GitHub: https://github.com/anoopcodehack
+
+
