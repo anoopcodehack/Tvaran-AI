@@ -3,21 +3,42 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
+interface Particle {
+  x: number;
+  y: number;
+  size: number;
+  delay: number;
+  duration: number;
+}
+
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [particles, setParticles] = useState<Particle[]>([]);
   const router = useRouter();
 
   // Auto-redirect if already logged in
   useEffect(() => {
-    if (localStorage.getItem("isLoggedIn") === "true") {
-      router.push("/dashboard");
+    if (typeof window !== "undefined") {
+      if (localStorage.getItem("isLoggedIn") === "true") {
+        router.push("/dashboard");
+      }
+
+      // Generate particles safely AFTER mount
+      const generated = Array.from({ length: 30 }).map(() => ({
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        size: Math.random() * 6 + 2,
+        delay: Math.random() * 10,
+        duration: 10 + Math.random() * 20,
+      }));
+
+      setParticles(generated);
     }
   }, [router]);
 
   const handleLogin = () => {
-    // ✅ Accept ANY email + password
     if (email.trim() && password.trim()) {
       localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem("userEmail", email);
@@ -27,7 +48,7 @@ export default function LoginPage() {
     }
   };
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     setMousePos({ x: e.clientX, y: e.clientY });
   };
 
@@ -44,28 +65,27 @@ export default function LoginPage() {
       <div className="absolute inset-0 bg-black opacity-50"></div>
 
       {/* Animated gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-green-500 via-yellow-400 to-orange-500 animate-gradient-slow opacity-40 rounded-lg"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-green-500 via-yellow-400 to-orange-500 animate-gradient-slow opacity-40"></div>
 
       {/* Floating particles */}
       <div className="absolute inset-0 pointer-events-none">
-        {Array.from({ length: 30 }).map((_, i) => {
-          const randomX = Math.random() * window.innerWidth;
-          const randomY = Math.random() * window.innerHeight;
-          const dx = (randomX - mousePos.x) * 0.02;
-          const dy = (randomY - mousePos.y) * 0.02;
+        {particles.map((p, i) => {
+          const dx = (p.x - mousePos.x) * 0.02;
+          const dy = (p.y - mousePos.y) * 0.02;
+
           return (
             <div
               key={i}
               className="absolute bg-white rounded-full opacity-20 animate-particle"
               style={{
-                width: `${Math.random() * 6 + 2}px`,
-                height: `${Math.random() * 6 + 2}px`,
-                top: `${randomY + dy}px`,
-                left: `${randomX + dx}px`,
-                animationDelay: `${Math.random() * 10}s`,
-                animationDuration: `${10 + Math.random() * 20}s`,
+                width: `${p.size}px`,
+                height: `${p.size}px`,
+                top: `${p.y + dy}px`,
+                left: `${p.x + dx}px`,
+                animationDelay: `${p.delay}s`,
+                animationDuration: `${p.duration}s`,
               }}
-            ></div>
+            />
           );
         })}
       </div>
@@ -99,18 +119,12 @@ export default function LoginPage() {
         </button>
       </div>
 
-      {/* Tailwind animations */}
+      {/* Animations */}
       <style jsx>{`
         @keyframes gradientShift {
-          0% {
-            background-position: 0% 50%;
-          }
-          50% {
-            background-position: 100% 50%;
-          }
-          100% {
-            background-position: 0% 50%;
-          }
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
         }
         .animate-gradient-slow {
           background-size: 300% 300%;
@@ -118,18 +132,9 @@ export default function LoginPage() {
         }
 
         @keyframes floatParticle {
-          0% {
-            transform: translateY(0) translateX(0);
-            opacity: 0.2;
-          }
-          50% {
-            transform: translateY(-20px) translateX(10px);
-            opacity: 0.4;
-          }
-          100% {
-            transform: translateY(0) translateX(0);
-            opacity: 0.2;
-          }
+          0% { transform: translate(0, 0); opacity: 0.2; }
+          50% { transform: translate(10px, -20px); opacity: 0.4; }
+          100% { transform: translate(0, 0); opacity: 0.2; }
         }
         .animate-particle {
           animation-name: floatParticle;
