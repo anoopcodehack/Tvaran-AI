@@ -5,10 +5,7 @@ TVARAN is a modern web platform that leverages AI and computer vision to help at
 Built with Next.js (App Router), TypeScript, and Framer Motion, TVARAN delivers a clean, scalable, and production-ready dashboard experience.
 
 🌐 Live Preview
-
-Add your deployed link here (Vercel / Netlify)
-Example:
-🔗 https://tvaran.vercel.app
+🔗 https://tvaran-ai.vercel.app/
 
 🧠 Key Features
 
