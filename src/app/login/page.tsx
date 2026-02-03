@@ -38,15 +38,17 @@ export default function LoginPage() {
     }
   }, [router]);
 
-  const handleLogin = () => {
-    if (email.trim() && password.trim()) {
-      localStorage.setItem("isLoggedIn", "true");
-      localStorage.setItem("userEmail", email);
-      router.push("/dashboard");
-    } else {
-      alert("Please enter email and password");
-    }
-  };
+ 
+const handleLogin = () => {
+  // TEMP DEMO LOGIC — replace with API later
+  if (email.includes("coach")) {
+    localStorage.setItem("role", "coach");
+    router.push("/coach/dashboard");
+  } else {
+    localStorage.setItem("role", "athlete"); // 🔴 THIS WAS MISSING
+    router.push("/dashboard");
+  }
+};
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     setMousePos({ x: e.clientX, y: e.clientY });

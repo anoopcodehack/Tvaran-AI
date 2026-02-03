@@ -2,8 +2,11 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function SignupPage() {
+  const router = useRouter();
+
   const [role, setRole] = useState<"athlete" | "coach" | null>(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -13,19 +16,30 @@ export default function SignupPage() {
   const handleSignup = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validation
+    // Validation ONLY for coach
     if (role === "coach" && !certificate) {
       alert("Please upload your coaching certificate for verification.");
       return;
     }
 
-    // TODO: Replace with API call to save user
+    // Demo form data (API later)
     const formData = new FormData();
     formData.append("name", name);
     formData.append("email", email);
     formData.append("password", password);
     formData.append("role", role!);
     if (certificate) formData.append("certificate", certificate);
+
+    // 🔥 COACH-ONLY REDIRECT
+    if (role === "coach") {
+  router.push("/coach/dashboard");
+  return;
+} else if (role === "athlete") {
+  router.push("/dashboard");
+  return;
+}
+
+
 
     // Demo alert
     alert(
@@ -42,7 +56,7 @@ export default function SignupPage() {
     setRole(null);
   };
 
-  return (
+ return (
     <div className="min-h-screen flex items-center justify-center bg-background px-4">
       <div className="max-w-md w-full bg-white rounded-xl shadow-md p-8">
         {!role ? (
@@ -50,6 +64,7 @@ export default function SignupPage() {
           <div className="text-center">
             <h1 className="text-2xl font-bold mb-6">Sign Up for TVARAN</h1>
             <p className="mb-4 text-gray-600">Please select your role:</p>
+
             <div className="flex flex-col gap-4">
               <button
                 onClick={() => setRole("athlete")}
@@ -57,6 +72,7 @@ export default function SignupPage() {
               >
                 Athlete
               </button>
+
               <button
                 onClick={() => setRole("coach")}
                 className="py-2 px-4 bg-green-600 text-white rounded-lg hover:bg-green-700 font-semibold"
@@ -65,10 +81,7 @@ export default function SignupPage() {
               </button>
             </div>
 
-            <Link
-              href="/"
-              className="block mt-6 text-gray-400 hover:underline"
-            >
+            <Link href="/" className="block mt-6 text-gray-400 hover:underline">
               Back to Home
             </Link>
           </div>
@@ -86,7 +99,7 @@ export default function SignupPage() {
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                   required
                 />
               </div>
@@ -97,7 +110,7 @@ export default function SignupPage() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                   required
                 />
               </div>
@@ -108,7 +121,7 @@ export default function SignupPage() {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                   required
                 />
               </div>
@@ -122,7 +135,9 @@ export default function SignupPage() {
                     type="file"
                     accept=".pdf,.jpg,.png"
                     onChange={(e) =>
-                      setCertificate(e.target.files ? e.target.files[0] : null)
+                      setCertificate(
+                        e.target.files ? e.target.files[0] : null
+                      )
                     }
                     className="w-full border px-3 py-2 rounded-lg"
                     required
@@ -135,7 +150,7 @@ export default function SignupPage() {
 
               <button
                 type="submit"
-                className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold mt-2"
+                className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold"
               >
                 Sign Up
               </button>
