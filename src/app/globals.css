@@ -51,3 +51,48 @@ h1, h2, h3, h4, h5, h6 {
 a {
   @apply text-accent hover:underline;
 }
+/* =========================
+   MOBILE RESPONSIVE FIXES
+   ========================= */
+@media (max-width: 640px) {
+
+  /* Prevent horizontal scroll */
+  html,
+  body {
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  /* Mobile-friendly base text */
+  body {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* Scale headings for mobile */
+  h1 {
+    font-size: 1.75rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+  }
+
+  /* Better spacing on small screens */
+  section,
+  main,
+  div {
+    max-width: 100%;
+  }
+
+  /* Improve tap experience */
+  a,
+  button {
+    touch-action: manipulation;
+  }
+}
+
