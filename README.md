@@ -60,7 +60,6 @@ ESLint
 Postman (API testing)
 
 VS Code
-
 📁 Project Structure
 src/
 └── app/
@@ -68,19 +67,35 @@ src/
     │   ├── achievement/
     │   │   └── page.tsx
     │   ├── add-item/
+    │   │   └── page.tsx
     │   ├── home/
+    │   │   └── page.tsx
     │   ├── profile/
+    │   │   └── page.tsx
     │   ├── report/
+    │   │   └── page.tsx
     │   ├── setting/
+    │   │   └── page.tsx
     │   └── logout/
+    │       └── page.tsx
+    │
     ├── login/
+    │   └── page.tsx
+    │
     ├── signup/
+    │   └── page.tsx
+    │
     ├── layout.tsx
-    ├── page.tsx
+    └── page.tsx
+
 public/
-globals.css
-next.config.ts
+├── assets/
+└── favicon.ico
+
+globals.css  
+next.config.ts  
 package.json
+
 
 📊 Achievements Module (Core Highlight)
 
