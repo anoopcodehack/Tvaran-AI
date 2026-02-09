@@ -17,7 +17,7 @@ export default function RootLayout({
     if (role === "coach") {
       setDashboardLink("/coach/dashboard");
     } else if (role === "athlete") {
-      setDashboardLink("/dashboard"); // 
+      setDashboardLink("/athlete/dashboard"); // 
     }
   }, []);
 
