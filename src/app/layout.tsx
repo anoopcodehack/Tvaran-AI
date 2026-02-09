@@ -38,12 +38,7 @@ export default function RootLayout({
               Home
             </Link>
 
-            <Link
-              href={dashboardLink}
-              className="text-sm font-medium hover:text-blue-600"
-            >
-              Dashboard
-            </Link>
+            
 
             <Link
               href="/login"
