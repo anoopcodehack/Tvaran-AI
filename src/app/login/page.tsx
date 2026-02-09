@@ -46,7 +46,7 @@ const handleLogin = () => {
     router.push("/coach/dashboard");
   } else {
     localStorage.setItem("role", "athlete"); // 🔴 THIS WAS MISSING
-    router.push("/dashboard");
+    router.push("/athlete/dashboard");
   }
 };
 

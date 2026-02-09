@@ -35,7 +35,7 @@ export default function SignupPage() {
   router.push("/coach/dashboard");
   return;
 } else if (role === "athlete") {
-  router.push("/dashboard");
+  router.push("/athlete/dashboard");
   return;
 }
 
