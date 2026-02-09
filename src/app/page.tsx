@@ -39,7 +39,7 @@ export default function LandingPage() {
               TVARAN AI uses computer vision to assess your skills, providing fair, remote analysis to help you get discovered.
             </p>
             <div className="flex gap-4 animate-fadeIn delay-1000">
-              <Link href="/dashboard">
+              <Link href="/signup">
                 <button className="px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-xl font-semibold hover:scale-105 transform transition shadow-lg">
                   Upload Your Video
                 </button>
