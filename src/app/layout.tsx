@@ -38,18 +38,18 @@ export default function RootLayout({
               Home
             </Link>
 
+            <Link
+              href="/login"
+              className="glow-button text-sm font-medium px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg hover:scale-105 transform transition"
+            >
+             LOGIN
+            </Link>
+
             
 
             <Link
-              href="/login"
-              className="text-sm font-medium hover:text-blue-600"
-            >
-              Login
-            </Link>
-
-            <Link
               href="/signup"
-              className="text-sm font-semibold bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition"
+              className="glow-button text-sm font-medium px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg hover:scale-105 transform transition"
             >
               SIGN UP
             </Link>

@@ -20,7 +20,7 @@ export default function LandingPage() {
         <nav className="flex gap-6 items-center">
           <Link href="#features" className="text-sm font-medium hover:underline underline-offset-4">Features</Link>
           <Link href="#about" className="text-sm font-medium hover:underline underline-offset-4">About</Link>
-          <Link href="/dashboard">
+          <Link href="/signup">
             <button className="px-5 py-2 bg-indigo-600 text-white rounded-lg font-semibold hover:scale-105 transform transition">
               Get Started
             </button>
