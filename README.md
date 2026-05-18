@@ -1,209 +1,176 @@
-🚀 TVARAN – AI-Powered Athletic Performance Platform
+# 🚀 TVARAN — AI-Powered Athletic Performance Platform
 
-TVARAN is a modern web platform that leverages AI and computer vision to help athletes assess skills, track achievements, and unlock their full potential through data-driven insights.
+> Empowering athletes with computer vision, data-driven insights,
+> and a modern dashboard to assess skills and track achievements.
 
-Built with Next.js (App Router), TypeScript, and Framer Motion, TVARAN delivers a clean, scalable, and production-ready dashboard experience.
+🔗 **Live Preview:** [tvaran-ai.vercel.app](https://tvaran-ai.vercel.app/) &nbsp;|&nbsp;
+💻 **Source Code:** [github.com/anoopcodehack/Tvaran-AI](https://github.com/anoopcodehack/Tvaran-AI)
 
-🌐 Live Preview
-🔗 https://tvaran-ai.vercel.app/
+---
 
-🧠 Key Features
+## 🧠 What is TVARAN?
 
-AI-Driven Skill Assessment
-Uses computer vision concepts to evaluate athletic performance remotely.
+TVARAN is a production-ready web platform that uses **AI and computer vision**
+to help athletes remotely assess performance, track achievements, and generate
+progress reports — all through a clean, responsive dashboard experience.
 
-Interactive Dashboard
-Centralized dashboard for tracking progress, achievements, and reports.
+Built with a focus on **scalability, clean architecture, and real-world UI/UX**,
+this project reflects how modern AI-integrated web platforms are structured and shipped.
 
-Achievements Management
+---
 
-Categorized achievements (Personal, Team, Milestone)
+## ✨ Key Features
 
-Progress tracking with visual indicators
+| Feature | Description |
+|---|---|
+| 🤖 AI Skill Assessment | Computer vision concepts for remote athletic evaluation |
+| 📊 Interactive Dashboard | Centralized hub for progress, reports, and insights |
+| 🏆 Achievements Module | Categorized tracking with search, filter & progress bars |
+| 🎞️ Smooth Animations | Framer Motion powered transitions throughout the UI |
+| 🔐 Authentication Flow | Login, Signup, and Logout fully implemented |
+| 📱 Responsive Design | Optimized for both desktop and mobile screens |
 
-Search and filter functionality
+---
 
-Smooth Animations
-Powered by Framer Motion for modern UI transitions.
+## 🛠️ Tech Stack
 
-Authentication Flow
+**Frontend**
 
-Login
+![Next.js](https://img.shields.io/badge/Next.js_14-black?style=flat&logo=next.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=flat&logo=tailwindcss&logoColor=white)
+![Framer Motion](https://img.shields.io/badge/Framer_Motion-EF008F?style=flat&logo=framer&logoColor=white)
 
-Signup
+| Tech | Role |
+|---|---|
+| Next.js 14 (App Router) | Core framework |
+| TypeScript | Type-safe development |
+| Tailwind CSS | Utility-first styling |
+| Framer Motion | UI animations |
+| React Icons | Icon system |
 
-Logout
+---
 
-Responsive UI
-Optimized for desktop and mobile screens.
+## 📁 Project Structure
 
-🏗️ Tech Stack
-
-Frontend
-
-Next.js 14 (App Router)
-
-React
-
-TypeScript
-
-Tailwind CSS
-
-Framer Motion
-
-React Icons
-
-Tooling
-
-ESLint
-
-Postman (API testing)
-
-VS Code
-📁 Project Structure
+```
 src/
 └── app/
     ├── dashboard/
-    │   ├── achievement/
-    │   │   └── page.tsx
-    │   ├── add-item/
-    │   │   └── page.tsx
-    │   ├── home/
-    │   │   └── page.tsx
-    │   ├── profile/
-    │   │   └── page.tsx
-    │   ├── report/
-    │   │   └── page.tsx
-    │   ├── setting/
-    │   │   └── page.tsx
-    │   └── logout/
-    │       └── page.tsx
-    │
-    ├── login/
-    │   └── page.tsx
-    │
-    ├── signup/
-    │   └── page.tsx
-    │
+    │   ├── achievement/     # 🏆 Achievements module
+    │   ├── home/            # 📊 Main dashboard
+    │   ├── profile/         # 👤 User profile
+    │   ├── report/          # 📈 Performance reports
+    │   ├── add-item/        # ➕ Add new records
+    │   ├── setting/         # ⚙️ Settings
+    │   └── logout/          # 🔓 Logout
+    ├── login/               # 🔐 Login page
+    ├── signup/              # 📝 Signup page
     ├── layout.tsx
-    └── page.tsx
+    └── page.tsx             # Landing page
+```
 
-public/
-├── assets/
-└── favicon.ico
+---
 
-globals.css  
-next.config.ts  
-package.json
+## 🏆 Achievements Module — Core Highlight
 
+The Achievements page is the most feature-rich module in TVARAN:
 
-📊 Achievements Module (Core Highlight)
+- 📂 **Category Filters** — Personal, Team, Milestone
+- 🔍 **Real-time Search** — Instant filtering as you type
+- 📊 **Progress Visualization** — Visual completion indicators
+- 🎞️ **Animated UI** — Smooth Framer Motion transitions
 
-The Achievements page allows users to:
+This module showcases:
+- Strong **TypeScript** typing throughout
+- **Component-driven** UI architecture
+- Clean **state management** patterns
+- Scalable and maintainable dashboard design
 
-View progress-based achievements
+---
 
-Filter by category:
+## 🖼️ Screenshots
 
-Personal
+| Landing Page | Dashboard |
+|---|---|
+| ![Landing](screenshots/landing.png) | ![Dashboard](screenshots/dashboard.png) |
 
-Team
+| Achievements | Profile |
+|---|---|
+| ![Achievements](screenshots/achievements.png) | ![Profile](screenshots/profile.png) |
 
-Milestone
+---
 
-Search achievements in real time
+## ⚙️ Getting Started
 
-Visualize completion progress
+### Prerequisites
+- Node.js **v18+**
+- npm or yarn
 
-Experience smooth UI animations
+### Installation & Run
 
-This module demonstrates:
-
-Strong TypeScript typing
-
-Component-driven UI logic
-
-Clean state management
-
-Scalable dashboard design
-
-🖼️ Screenshots
-Landing Page
-
-Dashboard – Achievements
-
-⚠️ Don’t skip screenshots. Repos without visuals look unfinished.
-
-⚙️ Getting Started
-Prerequisites
-
-Node.js (v18+)
-
-npm or yarn
-
-Installation
+```bash
+# 1. Clone the repository
 git clone https://github.com/anoopcodehack/Tvaran-AI.git
 cd tvaran
+
+# 2. Install dependencies
 npm install
 
-Run Locally
+# 3. Start dev server
 npm run dev
+```
 
+> 🌐 Visit `http://localhost:3000`
 
-Visit:
-👉 http://localhost:3000
+---
 
-🧪 Development Status
+## 🧪 Development Status
 
- UI & Dashboard Layout
+| Module | Status |
+|---|---|
+| UI & Dashboard Layout | ✅ Complete |
+| Achievements Module | ✅ Complete |
+| Animations & UX | ✅ Complete |
+| Authentication Flow | ✅ Complete |
+| Backend Integration | 🔄 In Progress |
+| AI Model Integration | 📅 Planned |
+| User Data Persistence | 📅 Planned |
 
- Achievements Module
+---
 
- Animations & UX
+## 🗺️ Roadmap
 
- Backend Integration
+- [ ] AI performance analysis integration
+- [ ] Backend API (Node.js / FastAPI)
+- [ ] Cloud-based video processing
+- [ ] User analytics & detailed reports
+- [ ] Admin dashboard for institutions
 
- AI Model Integration
+---
 
- User Data Persistence
+## 🤝 Contributing
 
-🧭 Roadmap
+Contributions are welcome!
 
-Integrate AI performance analysis
-
-Backend API (Node / FastAPI)
-
-User analytics & reports
-
-Cloud-based video processing
-
-Admin dashboard
-
-🤝 Contributing
-
-Contributions are welcome.
-
-Fork the repository
-
-Create a new branch
-
+```bash
+# Fork the repo, then:
 git checkout -b feature/your-feature
+# Make your changes, then open a Pull Request
+```
 
+---
 
-Commit changes
+## 📜 License
 
-Open a Pull Request
+This project is licensed under the **MIT License**.
 
-📜 License
+---
 
-This project is licensed under the MIT License.
+## 👤 Author
 
-👤 Author
+**Anoop A** — Full Stack Developer focused on AI-powered web platforms
 
-Anoop A
-📌 Full Stack Developer
-📌 Focused on AI-powered web platforms
-
-🔗 GitHub: https://github.com/anoopcodehack
+[![GitHub](https://img.shields.io/badge/GitHub-anoopcodehack-181717?style=flat&logo=github)](https://github.com/anoopcodehack)
 
 
