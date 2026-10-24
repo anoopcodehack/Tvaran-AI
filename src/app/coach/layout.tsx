@@ -1,4 +1,4 @@
-import CoachNavbar from "./components/CoachNavbar";
+import CoachHeader from "@/components/CoachHeader";
 
 export default function CoachLayout({
   children,
@@ -6,9 +6,11 @@ export default function CoachLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
-      <CoachNavbar />
-      <main className="px-6 md:px-12 py-8">{children}</main>
-    </>
+    <div className="min-h-screen flex flex-col bg-slate-900 text-slate-100 selection:bg-indigo-500 selection:text-white">
+      <CoachHeader />
+      <main className="flex-1 max-w-7xl w-full mx-auto p-6 sm:p-10">
+        {children}
+      </main>
+    </div>
   );
 }

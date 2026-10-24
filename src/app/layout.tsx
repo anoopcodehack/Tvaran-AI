@@ -1,70 +1,25 @@
-"use client";
-
 import "./globals.css";
-import Link from "next/link";
-import { useEffect, useState } from "react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "TVARAN AI — Edge Athletic Biomechanics & Performance Platform",
+  description:
+    "Zero-server-cost athletic performance and kinematic motion tracking platform leveraging client-side computer vision.",
+  icons: {
+    icon: "/favicon.ico",
+  },
+};
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [dashboardLink, setDashboardLink] = useState("/login");
-
-  useEffect(() => {
-    const role = localStorage.getItem("role");
-
-    if (role === "coach") {
-      setDashboardLink("/coach/dashboard");
-    } else if (role === "athlete") {
-      setDashboardLink("/athlete/dashboard"); // 
-    }
-  }, []);
-
   return (
     <html lang="en">
-      <body className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-blue-100 text-gray-900">
-        {/* Header */}
-        <header className="h-16 bg-white/80 backdrop-blur-md shadow flex items-center px-6 justify-between sticky top-0 z-50">
-          <Link
-            href="/"
-            className="text-2xl font-extrabold text-blue-600 tracking-wide hover:scale-105 transition-transform"
-          >
-            TVARAN
-          </Link>
-
-          <nav className="flex gap-6 items-center">
-            <Link href="/" className="text-sm font-medium hover:text-blue-600">
-              Home
-            </Link>
-
-            <Link
-              href="/login"
-              className="glow-button text-sm font-medium px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg hover:scale-105 transform transition"
-            >
-             LOGIN
-            </Link>
-
-            
-
-            <Link
-              href="/signup"
-              className="glow-button text-sm font-medium px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg hover:scale-105 transform transition"
-            >
-              SIGN UP
-            </Link>
-          </nav>
-        </header>
-
-        <main className="flex-1 px-6 md:px-12 py-8">
-          {children}
-        </main>
-
-        <footer className="py-4 text-center text-sm text-gray-600 border-t bg-white/60 backdrop-blur">
-          &copy; {new Date().getFullYear()} TVARAN. All rights reserved.
-        </footer>
+      <body className="min-h-screen bg-slate-50 text-slate-900 antialiased selection:bg-blue-600 selection:text-white">
+        {children}
       </body>
     </html>
   );
 }
-

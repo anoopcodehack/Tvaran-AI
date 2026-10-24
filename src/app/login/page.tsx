@@ -1,149 +1,137 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-
-interface Particle {
-  x: number;
-  y: number;
-  size: number;
-  delay: number;
-  duration: number;
-}
+import Link from "next/link";
+import { FiActivity, FiUser, FiShield, FiArrowRight, FiLock, FiMail } from "react-icons/fi";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [particles, setParticles] = useState<Particle[]>([]);
   const router = useRouter();
 
-  // Auto-redirect if already logged in
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      if (localStorage.getItem("isLoggedIn") === "true") {
-        router.push("/dashboard");
-      }
-
-      // Generate particles safely AFTER mount
-      const generated = Array.from({ length: 30 }).map(() => ({
-        x: Math.random() * window.innerWidth,
-        y: Math.random() * window.innerHeight,
-        size: Math.random() * 6 + 2,
-        delay: Math.random() * 10,
-        duration: 10 + Math.random() * 20,
-      }));
-
-      setParticles(generated);
+  const handleLogin = (roleToSet: "athlete" | "coach") => {
+    localStorage.setItem("role", roleToSet);
+    localStorage.setItem("isLoggedIn", "true");
+    if (roleToSet === "coach") {
+      router.push("/coach/dashboard");
+    } else {
+      router.push("/athlete/dashboard");
     }
-  }, [router]);
+  };
 
- 
-const handleLogin = () => {
-  // TEMP DEMO LOGIC — replace with API later
-  if (email.includes("coach")) {
-    localStorage.setItem("role", "coach");
-    router.push("/coach/dashboard");
-  } else {
-    localStorage.setItem("role", "athlete"); // 🔴 THIS WAS MISSING
-    router.push("/athlete/dashboard");
-  }
-};
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    setMousePos({ x: e.clientX, y: e.clientY });
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (email.toLowerCase().includes("coach")) {
+      handleLogin("coach");
+    } else {
+      handleLogin("athlete");
+    }
   };
 
   return (
-    <div
-      className="flex items-center justify-center h-screen bg-cover bg-center relative overflow-hidden"
-      style={{
-        backgroundImage:
-          "url('https://images.unsplash.com/photo-1599058917210-70b58a2ff8e0?auto=format&fit=crop&w=1470&q=80')",
-      }}
-      onMouseMove={handleMouseMove}
-    >
-      {/* Dark overlay */}
-      <div className="absolute inset-0 bg-black opacity-50"></div>
+    <div className="min-h-screen bg-slate-900 flex flex-col justify-center items-center px-6 py-12 relative overflow-hidden">
+      {/* Background glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-blue-600/15 blur-[120px] rounded-full pointer-events-none" />
 
-      {/* Animated gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-green-500 via-yellow-400 to-orange-500 animate-gradient-slow opacity-40"></div>
+      <div className="w-full max-w-md space-y-8 relative z-10">
+        {/* Brand Header */}
+        <div className="text-center space-y-2">
+          <Link href="/" className="inline-flex items-center gap-2.5 group">
+            <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/25 group-hover:scale-105 transition">
+              <FiActivity size={22} />
+            </div>
+            <span className="text-2xl font-black tracking-tight text-white">
+              TVARAN<span className="text-blue-500">AI</span>
+            </span>
+          </Link>
+          <h1 className="text-xl font-bold text-slate-100">Sign in to your Portal</h1>
+          <p className="text-xs text-slate-400">
+            Access automated computer vision performance telemetry.
+          </p>
+        </div>
 
-      {/* Floating particles */}
-      <div className="absolute inset-0 pointer-events-none">
-        {particles.map((p, i) => {
-          const dx = (p.x - mousePos.x) * 0.02;
-          const dy = (p.y - mousePos.y) * 0.02;
+        {/* 1-Click Fast Demo Logins for Reviewers */}
+        <div className="p-4 rounded-2xl bg-slate-800/80 border border-slate-700/80 space-y-3 shadow-md">
+          <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400 text-center">
+            ⚡ Quick Recruiter & Evaluator Access
+          </p>
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              type="button"
+              onClick={() => handleLogin("athlete")}
+              className="px-3 py-2.5 rounded-xl bg-blue-600/20 hover:bg-blue-600 text-blue-300 hover:text-white border border-blue-500/30 text-xs font-bold transition flex items-center justify-center gap-1.5"
+            >
+              <FiUser size={14} />
+              <span>Enter as Athlete</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleLogin("coach")}
+              className="px-3 py-2.5 rounded-xl bg-indigo-600/20 hover:bg-indigo-600 text-indigo-300 hover:text-white border border-indigo-500/30 text-xs font-bold transition flex items-center justify-center gap-1.5"
+            >
+              <FiShield size={14} />
+              <span>Enter as Coach</span>
+            </button>
+          </div>
+        </div>
 
-          return (
-            <div
-              key={i}
-              className="absolute bg-white rounded-full opacity-20 animate-particle"
-              style={{
-                width: `${p.size}px`,
-                height: `${p.size}px`,
-                top: `${p.y + dy}px`,
-                left: `${p.x + dx}px`,
-                animationDelay: `${p.delay}s`,
-                animationDuration: `${p.duration}s`,
-              }}
-            />
-          );
-        })}
+        {/* Standard Form */}
+        <form onSubmit={handleSubmit} className="p-6 rounded-2xl bg-slate-800/60 border border-slate-700/80 space-y-4 shadow-xl">
+          <div>
+            <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5">
+              Email Address
+            </label>
+            <div className="relative">
+              <FiMail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+              <input
+                type="email"
+                placeholder="athlete@tvaran.ai"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full pl-10 pr-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5">
+              Password
+            </label>
+            <div className="relative">
+              <FiLock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+              <input
+                type="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full pl-10 pr-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            className="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold shadow-md shadow-blue-500/25 transition flex items-center justify-center gap-2"
+          >
+            <span>Sign In</span>
+            <FiArrowRight size={14} />
+          </button>
+
+          <div className="pt-2 text-center text-xs text-slate-400">
+            Don't have an account?{" "}
+            <Link href="/signup" className="text-blue-400 hover:underline font-bold">
+              Sign Up
+            </Link>
+          </div>
+        </form>
+
+        <div className="text-center">
+          <Link href="/" className="text-xs text-slate-500 hover:text-slate-300 transition">
+            ← Back to Homepage
+          </Link>
+        </div>
       </div>
-
-      {/* Login form */}
-      <div className="relative z-10 bg-white p-8 rounded shadow-md w-full max-w-md">
-        <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">
-          Login
-        </h1>
-
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full mb-4 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full mb-4 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-
-        <button
-          onClick={handleLogin}
-          className="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-        >
-          Login
-        </button>
-      </div>
-
-      {/* Animations */}
-      <style jsx>{`
-        @keyframes gradientShift {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-        .animate-gradient-slow {
-          background-size: 300% 300%;
-          animation: gradientShift 15s ease infinite;
-        }
-
-        @keyframes floatParticle {
-          0% { transform: translate(0, 0); opacity: 0.2; }
-          50% { transform: translate(10px, -20px); opacity: 0.4; }
-          100% { transform: translate(0, 0); opacity: 0.2; }
-        }
-        .animate-particle {
-          animation-name: floatParticle;
-          animation-timing-function: ease-in-out;
-          animation-iteration-count: infinite;
-        }
-      `}</style>
     </div>
   );
 }

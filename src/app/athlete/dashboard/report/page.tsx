@@ -1,168 +1,267 @@
 "use client";
 
-import { FiCheckCircle, FiXCircle, FiFileText, FiArrowLeft, FiTrendingUp, FiBarChart2 } from "react-icons/fi";
-import { motion } from "framer-motion";
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import {
+  FiBarChart2,
+  FiTrendingUp,
+  FiActivity,
+  FiVideo,
+  FiCheckCircle,
+  FiAlertTriangle,
+  FiFilter,
+} from "react-icons/fi";
+import {
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+  BarChart,
+  Bar,
+} from "recharts";
+import { getSavedDrills } from "@/lib/mockData";
+import { DrillSession } from "@/types";
 
 export default function ReportsPage() {
-  const reports = [
-    { id: 1, date: "2025-09-01", attendance: "Present", assignment: "Submitted", credits: 8 },
-    { id: 2, date: "2025-09-10", attendance: "Absent", assignment: "Not Submitted", credits: 0 },
-    { id: 3, date: "2025-09-20", attendance: "Present", assignment: "Submitted", credits: 10 },
-    { id: 4, date: "2025-09-25", attendance: "Present", assignment: "Not Submitted", credits: 6 },
-  ];
+  const [drills, setDrills] = useState<DrillSession[]>([]);
+  const [filterCategory, setFilterCategory] = useState<string>("All");
 
-  // 🔹 Compute analytics
-  const total = reports.length;
-  const attendancePresent = reports.filter((r) => r.attendance === "Present").length;
-  const assignmentsDone = reports.filter((r) => r.assignment === "Submitted").length;
-  const avgCredits = (reports.reduce((sum, r) => sum + r.credits, 0) / (total * 10)) * 100;
+  useEffect(() => {
+    setDrills(getSavedDrills());
+  }, []);
 
-  // 🔹 Chart data
-  const pieData = [
-    { name: "Present", value: attendancePresent },
-    { name: "Absent", value: total - attendancePresent },
-  ];
-  const COLORS = ["#34d399", "#f87171"];
+  const filtered = drills.filter(
+    (d) => filterCategory === "All" || d.category === filterCategory
+  );
 
-  // 🔹 Badge renderer
-  const getBadge = (type: string, value: string) => {
-    if (type === "attendance") {
-      return value === "Present" ? (
-        <span className="flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">
-          <FiCheckCircle size={14} /> {value}
-        </span>
-      ) : (
-        <span className="flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800">
-          <FiXCircle size={14} /> {value}
-        </span>
-      );
-    }
-    if (type === "assignment") {
-      return value === "Submitted" ? (
-        <span className="flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800">
-          <FiFileText size={14} /> {value}
-        </span>
-      ) : (
-        <span className="flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800">
-          <FiFileText size={14} /> {value}
-        </span>
-      );
-    }
-  };
+  const totalDrills = drills.length;
+  const optimalCount = drills.filter((d) => d.status === "Optimal").length;
+  const avgFormScore =
+    totalDrills > 0
+      ? Math.round(drills.reduce((acc, cur) => acc + cur.formScore, 0) / totalDrills)
+      : 90;
+  const avgKneeAngle =
+    totalDrills > 0
+      ? Math.round(drills.reduce((acc, cur) => acc + cur.avgKneeAngle, 0) / totalDrills)
+      : 86;
+
+  // Chart data formatted from drills in reverse chronological order
+  const chartData = [...drills].reverse().map((d, index) => ({
+    name: `Session ${index + 1}`,
+    score: d.formScore,
+    angle: d.avgKneeAngle,
+    reps: d.reps,
+  }));
 
   return (
-    <div className="p-6 space-y-10 animate-fade-in">
-      {/* Title */}
-      <h1 className="text-4xl font-extrabold text-center bg-gradient-to-r from-green-600 to-orange-600 bg-clip-text text-transparent drop-shadow">
-        📊 Your Performance Reports
-      </h1>
+    <div className="space-y-8">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
+            <FiBarChart2 className="text-blue-600" />
+            <span>Kinematic Telemetry & Performance Reports</span>
+          </h1>
+          <p className="text-xs sm:text-sm text-slate-500">
+            Automated biomechanical metrics captured via in-browser computer vision.
+          </p>
+        </div>
+
+        <Link
+          href="/athlete/dashboard/record"
+          className="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold shadow-md shadow-blue-500/20 flex items-center gap-2 transition w-fit"
+        >
+          <FiVideo size={14} />
+          <span>Record New Session</span>
+        </Link>
+      </div>
 
       {/* Analytics Summary */}
-      <div className="grid gap-6 md:grid-cols-3">
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          className="bg-white/80 backdrop-blur-md p-6 rounded-2xl shadow-lg border border-gray-200 flex flex-col items-center"
-        >
-          <FiTrendingUp size={28} className="text-green-600" />
-          <h3 className="text-lg font-semibold mt-2">Attendance Rate</h3>
-          <p className="text-2xl font-bold text-green-700">{((attendancePresent / total) * 100).toFixed(0)}%</p>
-        </motion.div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+            Form Consistency
+          </span>
+          <p className="text-3xl font-extrabold text-slate-900">{avgFormScore}%</p>
+          <p className="text-xs text-emerald-600 font-semibold flex items-center gap-1">
+            <FiCheckCircle size={12} /> {optimalCount} of {totalDrills} Optimal
+          </p>
+        </div>
 
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          className="bg-white/80 backdrop-blur-md p-6 rounded-2xl shadow-lg border border-gray-200 flex flex-col items-center"
-        >
-          <FiFileText size={28} className="text-blue-600" />
-          <h3 className="text-lg font-semibold mt-2">Assignments Done</h3>
-          <p className="text-2xl font-bold text-blue-700">{((assignmentsDone / total) * 100).toFixed(0)}%</p>
-        </motion.div>
+        <div className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+            Avg Knee Flexion Angle
+          </span>
+          <p className="text-3xl font-extrabold text-slate-900">{avgKneeAngle}°</p>
+          <p className="text-xs text-blue-600 font-semibold">Standard: 80°–90° Parallel</p>
+        </div>
 
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          className="bg-white/80 backdrop-blur-md p-6 rounded-2xl shadow-lg border border-gray-200 flex flex-col items-center"
-        >
-          <FiBarChart2 size={28} className="text-yellow-600" />
-          <h3 className="text-lg font-semibold mt-2">Avg Credits</h3>
-          <p className="text-2xl font-bold text-yellow-700">{avgCredits.toFixed(0)}%</p>
-        </motion.div>
-      </div>
+        <div className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+            Kinematic Telemetry
+          </span>
+          <p className="text-3xl font-extrabold text-slate-900">33 Points</p>
+          <p className="text-xs text-slate-500">Full Skeletal Vectors</p>
+        </div>
 
-      {/* Reports Table */}
-      <div className="bg-white/70 backdrop-blur-md shadow-xl rounded-2xl overflow-hidden border border-gray-200">
-        <table className="min-w-full text-sm">
-          <thead className="bg-gradient-to-r from-blue-50 to-purple-50 text-left">
-            <tr>
-              <th className="px-6 py-3 font-semibold">Date</th>
-              <th className="px-6 py-3 font-semibold">Attendance</th>
-              <th className="px-6 py-3 font-semibold">Assignment</th>
-              <th className="px-6 py-3 font-semibold">Credits</th>
-            </tr>
-          </thead>
-          <tbody>
-            {reports.map((report) => (
-              <tr
-                key={report.id}
-                className="border-t hover:bg-blue-50/40 transition duration-200"
-              >
-                <td className="px-6 py-4 font-medium">{report.date}</td>
-                <td className="px-6 py-4">{getBadge("attendance", report.attendance)}</td>
-                <td className="px-6 py-4">{getBadge("assignment", report.assignment)}</td>
-                <td className="px-6 py-4">
-                  <div className="flex flex-col gap-1 w-40">
-                    <div className="bg-gray-200 rounded-full h-2 overflow-hidden">
-                      <motion.div
-                        className="h-2 rounded-full bg-gradient-to-r from-yellow-400 to-orange-500"
-                        initial={{ width: 0 }}
-                        animate={{ width: `${(report.credits / 10) * 100}%` }}
-                        transition={{ duration: 0.8 }}
-                      />
-                    </div>
-                    <span className="text-xs font-semibold text-gray-700">
-                      {report.credits} / 10
-                    </span>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Chart Section */}
-      <div className="mt-12 bg-white/80 backdrop-blur-md p-6 rounded-2xl shadow-lg border border-gray-200">
-        <h2 className="text-2xl font-bold mb-6 flex items-center gap-2 text-gray-700">
-          📈 Attendance Distribution
-        </h2>
-        <div className="h-64">
-          <ResponsiveContainer>
-            <PieChart>
-              <Pie
-                data={pieData}
-                dataKey="value"
-                cx="50%"
-                cy="50%"
-                outerRadius={90}
-                label
-              >
-                {pieData.map((_, index) => (
-                  <Cell key={index} fill={COLORS[index]} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
+        <div className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+            Total Sessions
+          </span>
+          <p className="text-3xl font-extrabold text-slate-900">{totalDrills}</p>
+          <p className="text-xs text-slate-500">Verified Sessions</p>
         </div>
       </div>
 
-      {/* Back Button */}
-      <div className="flex justify-center">
-        <a
-          href="/dashboard"
-          className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform"
-        >
-          <FiArrowLeft size={18} /> Back to Dashboard
-        </a>
+      {/* Recharts Analytics Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Form Score Progression Curve */}
+        <div className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-base font-bold text-slate-900">Form Score Progression (%)</h2>
+              <p className="text-xs text-slate-500">Session-over-session kinematic quality</p>
+            </div>
+            <span className="text-xs font-bold px-2 py-1 bg-blue-50 text-blue-700 rounded-lg">
+              Target &gt; 90%
+            </span>
+          </div>
+
+          <div className="h-64 w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={chartData} margin={{ top: 10, right: 20, left: -20, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                <XAxis dataKey="name" tick={{ fontSize: 11, fill: "#64748b" }} />
+                <YAxis domain={[50, 100]} tick={{ fontSize: 11, fill: "#64748b" }} />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "#0f172a",
+                    color: "#fff",
+                    borderRadius: "12px",
+                    border: "none",
+                    fontSize: "12px",
+                  }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="score"
+                  stroke="#2563eb"
+                  strokeWidth={3}
+                  dot={{ fill: "#2563eb", r: 4 }}
+                  activeDot={{ r: 6 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* Knee Flexion Angle Distribution */}
+        <div className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-base font-bold text-slate-900">Knee Joint Flexion Angle (°)</h2>
+              <p className="text-xs text-slate-500">Calculated vector angle at peak contraction</p>
+            </div>
+            <span className="text-xs font-bold px-2 py-1 bg-emerald-50 text-emerald-700 rounded-lg">
+              Below 90° = Optimal
+            </span>
+          </div>
+
+          <div className="h-64 w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={chartData} margin={{ top: 10, right: 20, left: -20, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                <XAxis dataKey="name" tick={{ fontSize: 11, fill: "#64748b" }} />
+                <YAxis domain={[0, 140]} tick={{ fontSize: 11, fill: "#64748b" }} />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "#0f172a",
+                    color: "#fff",
+                    borderRadius: "12px",
+                    border: "none",
+                    fontSize: "12px",
+                  }}
+                />
+                <Bar dataKey="angle" fill="#10b981" radius={[6, 6, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      </div>
+
+      {/* Filterable Drills Table */}
+      <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-6 space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 className="text-lg font-bold text-slate-900">Drill History & Diagnostics</h2>
+            <p className="text-xs text-slate-500">Detailed breakdowns of joint flexion and repetition cadence</p>
+          </div>
+
+          {/* Filter */}
+          <div className="flex items-center gap-2">
+            <FiFilter className="text-slate-400" size={14} />
+            <select
+              value={filterCategory}
+              onChange={(e) => setFilterCategory(e.target.value)}
+              className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="All">All Categories</option>
+              <option value="Mobility & Strength">Mobility & Strength</option>
+              <option value="Speed & Agility">Speed & Agility</option>
+              <option value="Explosive Power">Explosive Power</option>
+              <option value="Technique">Technique</option>
+            </select>
+          </div>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs">
+            <thead>
+              <tr className="border-b border-slate-100 text-slate-400 font-bold uppercase tracking-wider">
+                <th className="pb-3">Drill Name</th>
+                <th className="pb-3">Category</th>
+                <th className="pb-3">Date</th>
+                <th className="pb-3">Volume</th>
+                <th className="pb-3">Knee Angle</th>
+                <th className="pb-3">Form Score</th>
+                <th className="pb-3">Status</th>
+                <th className="pb-3">AI Diagnostic Feedback</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {filtered.map((drill) => (
+                <tr key={drill.id} className="hover:bg-slate-50/50 transition">
+                  <td className="py-4 font-bold text-slate-800">{drill.drillName}</td>
+                  <td className="py-4 text-slate-500">{drill.category}</td>
+                  <td className="py-4 text-slate-500">{drill.date}</td>
+                  <td className="py-4 font-semibold text-slate-700">{drill.reps} reps</td>
+                  <td className="py-4 font-mono font-bold text-blue-600">{drill.avgKneeAngle}°</td>
+                  <td className="py-4 font-black text-slate-900">{drill.formScore}%</td>
+                  <td className="py-4">
+                    <span
+                      className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full font-bold text-[10px] ${
+                        drill.status === "Optimal"
+                          ? "bg-emerald-50 text-emerald-700 border border-emerald-200/50"
+                          : "bg-amber-50 text-amber-700 border border-amber-200/50"
+                      }`}
+                    >
+                      {drill.status === "Optimal" ? (
+                        <FiCheckCircle size={11} />
+                      ) : (
+                        <FiAlertTriangle size={11} />
+                      )}
+                      <span>{drill.status}</span>
+                    </span>
+                  </td>
+                  <td className="py-4 text-slate-600 max-w-xs">{drill.feedback}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

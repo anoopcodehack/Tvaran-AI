@@ -1,123 +1,201 @@
 "use client";
 
-import Link from "next/link";
-import { FiMail, FiUser } from "react-icons/fi";
+import { useState, useEffect } from "react";
+import {
+  FiUser,
+  FiMail,
+  FiActivity,
+  FiCheck,
+  FiShield,
+  FiZap,
+} from "react-icons/fi";
+import { getSavedProfile, saveProfile } from "@/lib/mockData";
+import { AthleteProfile } from "@/types";
 
 export default function ProfilePage() {
-  return (
-    <div className="min-h-screen relative flex items-center justify-center overflow-hidden bg-gray-100">
-      {/* Animated background shapes */}
-      <div className="absolute top-[-100px] left-[-100px] w-72 h-72 bg-purple-400 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob"></div>
-      <div className="absolute top-[200px] right-[-150px] w-72 h-72 bg-indigo-400 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
-      <div className="absolute bottom-[-100px] left-[50px] w-72 h-72 bg-pink-400 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-4000"></div>
+  const [profile, setProfile] = useState<AthleteProfile>(getSavedProfile());
+  const [savedSuccess, setSavedSuccess] = useState(false);
 
-      {/* Profile card */}
-      <div className="relative bg-white shadow-2xl rounded-3xl max-w-2xl w-full overflow-hidden transform transition-transform hover:scale-105 duration-500">
-        {/* Header */}
-        <div className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 p-8 text-white flex items-center gap-6">
-          <img
-            src="/avatar.png"
-            alt="User Avatar"
-            className="w-24 h-24 rounded-full border-4 border-white object-cover transition-transform transform hover:scale-110 hover:shadow-xl"
-          />
-          <div>
-            <h1 className="text-3xl font-bold animate-fadeIn">John Doe</h1>
-            <p className="flex items-center gap-2 text-indigo-100 mt-2 animate-fadeIn delay-500">
-              <FiMail /> johndoe@example.com
+  useEffect(() => {
+    setProfile(getSavedProfile());
+  }, []);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    saveProfile(profile);
+    setSavedSuccess(true);
+    setTimeout(() => setSavedSuccess(false), 3000);
+  };
+
+  return (
+    <div className="max-w-4xl mx-auto space-y-8">
+      {/* Header */}
+      <div>
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
+          <FiUser className="text-blue-600" />
+          <span>Athletic Identity & Biometrics</span>
+        </h1>
+        <p className="text-xs sm:text-sm text-slate-500">
+          Manage your verified scouting credentials, physical measurements, and performance baselines.
+        </p>
+      </div>
+
+      {/* Main Profile Card */}
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Top Identity Banner */}
+        <div className="p-6 rounded-3xl bg-white border border-slate-200/80 shadow-xs flex flex-col sm:flex-row items-center gap-6">
+          <div className="w-24 h-24 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 border-4 border-white shadow-md flex items-center justify-center text-white text-3xl font-black">
+            AH
+          </div>
+          <div className="space-y-1 text-center sm:text-left">
+            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+              <h2 className="text-2xl font-bold text-slate-900">{profile.name}</h2>
+              <span className="px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 text-xs font-bold border border-blue-200/60 flex items-center gap-1">
+                <FiShield size={12} /> {profile.level}
+              </span>
+            </div>
+            <p className="text-xs text-slate-500">
+              {profile.sport} • {profile.position}
+            </p>
+            <p className="text-xs text-slate-400">
+              Verified Scout ID: <span className="font-mono text-slate-600">TVAR-9921-ATH</span>
             </p>
           </div>
         </div>
 
-        {/* Content */}
-        <div className="p-8 space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="relative">
-              <label className="block text-gray-600 mb-2 flex items-center gap-2"> 
-                <FiUser /> Name
+        {/* Biometrics & Personal Stats */}
+        <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xs space-y-6">
+          <h3 className="text-base font-bold text-slate-900 flex items-center gap-2 border-b border-slate-100 pb-3">
+            <FiActivity className="text-blue-600" />
+            <span>Physical Attributes & Baseline Measurements</span>
+          </h3>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                Full Name
               </label>
               <input
                 type="text"
-                defaultValue="John Doe"
-                className="w-full border border-gray-300 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
+                value={profile.name}
+                onChange={(e) => setProfile({ ...profile, name: e.target.value })}
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
 
-            <div className="relative">
-              <label className="block text-gray-600 mb-2 flex items-center gap-2">
-                <FiMail /> Email
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                Email
               </label>
               <input
                 type="email"
-                defaultValue="johndoe@example.com"
-                className="w-full border border-gray-300 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
+                value={profile.email}
+                onChange={(e) => setProfile({ ...profile, email: e.target.value })}
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                Sport & Discipline
+              </label>
+              <input
+                type="text"
+                value={profile.sport}
+                onChange={(e) => setProfile({ ...profile, sport: e.target.value })}
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                Height
+              </label>
+              <input
+                type="text"
+                value={profile.height}
+                onChange={(e) => setProfile({ ...profile, height: e.target.value })}
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                Weight
+              </label>
+              <input
+                type="text"
+                value={profile.weight}
+                onChange={(e) => setProfile({ ...profile, weight: e.target.value })}
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                Wingspan
+              </label>
+              <input
+                type="text"
+                value={profile.wingspan}
+                onChange={(e) => setProfile({ ...profile, wingspan: e.target.value })}
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                Vertical Jump PR
+              </label>
+              <input
+                type="text"
+                value={profile.verticalJump}
+                onChange={(e) => setProfile({ ...profile, verticalJump: e.target.value })}
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                40-Yard Sprint PR
+              </label>
+              <input
+                type="text"
+                value={profile.sprint40yd}
+                onChange={(e) => setProfile({ ...profile, sprint40yd: e.target.value })}
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                Assigned Head Coach
+              </label>
+              <input
+                type="text"
+                value={profile.assignedCoach}
+                onChange={(e) => setProfile({ ...profile, assignedCoach: e.target.value })}
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
           </div>
 
-          {/* Social Media */}
-          <div className="flex items-center gap-6 justify-center md:justify-start">
-            <a
-              href="#"
-              className="text-indigo-500 hover:text-indigo-700 transition text-xl font-semibold"
+          <div className="flex items-center justify-between pt-4 border-t border-slate-100">
+            <button
+              type="submit"
+              className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold shadow-md shadow-blue-500/20 transition hover:scale-[1.02]"
             >
-              LinkedIn
-            </a>
-            <a
-              href="#"
-              className="text-blue-500 hover:text-blue-700 transition text-xl font-semibold"
-            >
-              Twitter
-            </a>
-            <a
-              href="#"
-              className="text-pink-500 hover:text-pink-700 transition text-xl font-semibold"
-            >
-              Instagram
-            </a>
+              Save Biometrics
+            </button>
+
+            {savedSuccess && (
+              <span className="text-xs font-bold text-emerald-600 flex items-center gap-1.5 animate-fadeIn">
+                <FiCheck size={16} /> Biometrics saved successfully!
+              </span>
+            )}
           </div>
-
-          {/* Save button */}
-          <button className="w-full md:w-auto block mx-auto md:mx-0 mt-6 px-8 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-2xl font-semibold hover:scale-105 hover:shadow-xl transition duration-300">
-            Save Changes
-          </button>
-
-          {/* 🚀 Back to Dashboard button */}
-          <Link
-            href="/dashboard"
-            className="w-full md:w-auto block mx-auto md:mx-0 mt-4 px-8 py-3 bg-white-600 text-white rounded-2xl font-semibold hover:bg-indigo-700 hover:scale-105 hover:shadow-xl transition duration-300 text-center"
-          >
-            ← Back to Dashboard
-          </Link>
         </div>
-      </div>
-
-      {/* Tailwind animations */}
-      <style jsx>{`
-        @keyframes blob {
-          0%, 100% { transform: translate(0px, 0px) scale(1); }
-          33% { transform: translate(30px, -50px) scale(1.1); }
-          66% { transform: translate(-20px, 20px) scale(0.9); }
-        }
-        .animate-blob {
-          animation: blob 8s infinite;
-        }
-        .animation-delay-2000 {
-          animation-delay: 2s;
-        }
-        .animation-delay-4000 {
-          animation-delay: 4s;
-        }
-        @keyframes fadeIn {
-          0% { opacity: 0; transform: translateY(-10px); }
-          100% { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fadeIn {
-          animation: fadeIn 1s forwards;
-        }
-        .delay-500 {
-          animation-delay: 0.5s;
-        }
-      `}</style>
+      </form>
     </div>
   );
 }

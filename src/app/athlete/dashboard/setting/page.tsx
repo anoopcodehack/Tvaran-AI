@@ -1,256 +1,134 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import { FiUser, FiMail, FiLock, FiTrash2, FiArrowLeft } from "react-icons/fi";
-
-type Language =
-  | "hi"
-  | "en"
-  | "bn"
-  | "te"
-  | "mr"
-  | "ta"
-  | "ur"
-  | "gu"
-  | "kn"
-  | "ml";
+import { FiSettings, FiCheck, FiSliders, FiBell, FiShield, FiLock } from "react-icons/fi";
 
 export default function SettingsPage() {
-  const [name, setName] = useState("John Doe");
-  const [email, setEmail] = useState("johndoe@example.com");
-  const [password, setPassword] = useState("");
-  const [notifications, setNotifications] = useState({
-    email: true,
-    sms: false,
-    push: true,
-  });
-  const [theme, setTheme] = useState<"light" | "dark">("light");
-  const [accountVisibility, setAccountVisibility] =
-    useState<"public" | "private">("public");
-  const [language, setLanguage] = useState<Language>("en");
+  const [units, setUnits] = useState<"imperial" | "metric">("imperial");
+  const [targetFps, setTargetFps] = useState<"30" | "60">("60");
+  const [emailAlerts, setEmailAlerts] = useState(true);
+  const [coachAlerts, setCoachAlerts] = useState(true);
+  const [saved, setSaved] = useState(false);
 
-  const handleSaveProfile = () => alert("Profile saved successfully!");
-  const handlePasswordChange = () => {
-    alert("Password updated successfully!");
-    setPassword("");
-  };
-  const handleDeleteAccount = () => {
-    if (
-      confirm(
-        "Are you sure you want to delete your account? This cannot be undone."
-      )
-    ) {
-      alert("Account deleted!");
-    }
+  const handleSave = () => {
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2500);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-indigo-100 to-purple-100 p-6 flex flex-col gap-8 items-center">
-      <h1 className="text-4xl font-bold text-gray-800 animate-fadeIn">
-        ⚙️ Settings
-      </h1>
+    <div className="max-w-4xl mx-auto space-y-8">
+      {/* Header */}
+      <div>
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
+          <FiSettings className="text-blue-600" />
+          <span>Platform & Vision Engine Settings</span>
+        </h1>
+        <p className="text-xs sm:text-sm text-slate-500">
+          Configure on-device video inference preferences, measurement units, and telemetry synchronization.
+        </p>
+      </div>
 
-      {/* Profile Card */}
-      <section className="bg-white shadow-2xl rounded-3xl p-6 w-full max-w-4xl transform transition-transform hover:scale-105 duration-500">
-        <h2 className="text-2xl font-semibold text-indigo-600 mb-4">Profile</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="relative">
-            <label className="flex items-center gap-2 mb-1 font-medium">
-              <FiUser /> Full Name
-            </label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
-            />
-          </div>
-          <div className="relative">
-            <label className="flex items-center gap-2 mb-1 font-medium">
-              <FiMail /> Email
-            </label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
-            />
-          </div>
-          <div className="md:col-span-2">
-            <label className="block mb-1 font-medium">Profile Picture</label>
-            <input
-              type="file"
-              accept="image/*"
-              className="w-full border px-3 py-2 rounded-xl"
-            />
-          </div>
-        </div>
-        <button
-          onClick={handleSaveProfile}
-          className="mt-4 w-full md:w-auto px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-2xl font-semibold hover:scale-105 hover:shadow-xl transition"
-        >
-          Save Profile
-        </button>
-      </section>
+      <div className="space-y-6">
+        {/* Computer Vision & Performance Preferences */}
+        <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xs space-y-6">
+          <h2 className="text-base font-bold text-slate-900 flex items-center gap-2 border-b border-slate-100 pb-3">
+            <FiSliders className="text-blue-600" />
+            <span>On-Device Computer Vision Engine</span>
+          </h2>
 
-      {/* Password Card */}
-      <section className="bg-white shadow-2xl rounded-3xl p-6 w-full max-w-4xl transform transition-transform hover:scale-105 duration-500">
-        <h2 className="text-2xl font-semibold text-indigo-600 mb-4">Password</h2>
-        <div className="flex flex-col md:flex-row gap-4 items-center">
-          <input
-            type="password"
-            placeholder="New Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="flex-1 px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
-          />
-          <button
-            onClick={handlePasswordChange}
-            className="px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-2xl font-semibold hover:scale-105 hover:shadow-xl transition"
-          >
-            Update Password
-          </button>
-        </div>
-      </section>
-
-      {/* Notifications & Preferences */}
-      <section className="bg-white shadow-2xl rounded-3xl p-6 w-full max-w-4xl transform transition-transform hover:scale-105 duration-500">
-        <h2 className="text-2xl font-semibold text-indigo-600 mb-4">
-          Notifications & Preferences
-        </h2>
-
-        <div className="flex flex-col md:flex-row gap-6 items-center mb-4">
-          {["email", "sms", "push"].map((type) => (
-            <div key={type} className="flex items-center gap-2">
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={notifications[type as keyof typeof notifications]}
-                  onChange={() =>
-                    setNotifications({
-                      ...notifications,
-                      [type]:
-                        !notifications[type as keyof typeof notifications],
-                    })
-                  }
-                  className="sr-only peer"
-                />
-                <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-indigo-500 transition-all"></div>
-                <span className="ml-3 text-gray-700 capitalize">
-                  {type} notifications
-                </span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                Measurement System
               </label>
+              <select
+                value={units}
+                onChange={(e) => setUnits(e.target.value as any)}
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="imperial">Imperial (Inches, Pounds, 40-yd)</option>
+                <option value="metric">Metric (Centimeters, Kilograms, 100m)</option>
+              </select>
+              <p className="text-[11px] text-slate-400 mt-1.5">
+                Affects jump height and sprint distance presentation.
+              </p>
             </div>
-          ))}
+
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                Target Pose Inference Frame Rate
+              </label>
+              <select
+                value={targetFps}
+                onChange={(e) => setTargetFps(e.target.value as any)}
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="60">60 FPS (Hardware Accelerated WebGL)</option>
+                <option value="30">30 FPS (Thermal / Battery Saver Mode)</option>
+              </select>
+              <p className="text-[11px] text-slate-400 mt-1.5">
+                Higher frame rate yields sharper angle calculations during explosive jumps.
+              </p>
+            </div>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div>
-            <label className="block mb-1 font-medium">Theme</label>
-            <select
-              value={theme}
-              onChange={(e) =>
-                setTheme(e.target.value as "light" | "dark")
-              }
-              className="w-full px-3 py-2 border rounded-xl"
-            >
-              <option value="light">Light</option>
-              <option value="dark">Dark</option>
-            </select>
-          </div>
+        {/* Notifications */}
+        <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xs space-y-4">
+          <h2 className="text-base font-bold text-slate-900 flex items-center gap-2 border-b border-slate-100 pb-3">
+            <FiBell className="text-blue-600" />
+            <span>Coach Telemetry & Notifications</span>
+          </h2>
 
-          <div>
-            <label className="block mb-1 font-medium">
-              Account Visibility
+          <div className="space-y-3">
+            <label className="flex items-center justify-between p-3 rounded-xl bg-slate-50 hover:bg-slate-100/70 transition cursor-pointer">
+              <div>
+                <p className="text-xs font-bold text-slate-800">Coach Feedback Alerts</p>
+                <p className="text-[11px] text-slate-500">
+                  Notify me when Coach Vance reviews a drill or flags form correction.
+                </p>
+              </div>
+              <input
+                type="checkbox"
+                checked={coachAlerts}
+                onChange={() => setCoachAlerts(!coachAlerts)}
+                className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
+              />
             </label>
-            <select
-              value={accountVisibility}
-              onChange={(e) =>
-                setAccountVisibility(
-                  e.target.value as "public" | "private"
-                )
-              }
-              className="w-full px-3 py-2 border rounded-xl"
-            >
-              <option value="public">Public</option>
-              <option value="private">Private</option>
-            </select>
-          </div>
 
-          <div>
-            <label className="block mb-1 font-medium">Language</label>
-            <select
-              value={language}
-              onChange={(e) =>
-                setLanguage(e.target.value as Language)
-              }
-              className="w-full px-3 py-2 border rounded-xl"
-            >
-              <option value="hi">हिंदी (Hindi)</option>
-              <option value="en">English</option>
-              <option value="bn">বাংলা (Bengali)</option>
-              <option value="te">తెలుగు (Telugu)</option>
-              <option value="mr">मराठी (Marathi)</option>
-              <option value="ta">தமிழ் (Tamil)</option>
-              <option value="ur">اردو (Urdu)</option>
-              <option value="gu">ગુજરાતી (Gujarati)</option>
-              <option value="kn">ಕನ್ನಡ (Kannada)</option>
-              <option value="ml">മലയാളം (Malayalam)</option>
-            </select>
+            <label className="flex items-center justify-between p-3 rounded-xl bg-slate-50 hover:bg-slate-100/70 transition cursor-pointer">
+              <div>
+                <p className="text-xs font-bold text-slate-800">Weekly Biomechanics Digest</p>
+                <p className="text-[11px] text-slate-500">
+                  Receive an automated kinematic summary of depth consistency and speed PRs.
+                </p>
+              </div>
+              <input
+                type="checkbox"
+                checked={emailAlerts}
+                onChange={() => setEmailAlerts(!emailAlerts)}
+                className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
+              />
+            </label>
           </div>
         </div>
-      </section>
 
-      {/* Danger Zone */}
-      <section className="bg-white shadow-2xl rounded-3xl p-6 w-full max-w-4xl transform transition-transform hover:scale-105 duration-500">
-        <h2 className="text-2xl font-semibold text-red-600 mb-4 flex items-center gap-2">
-          <FiTrash2 /> Danger Zone
-        </h2>
-        <button
-          onClick={handleDeleteAccount}
-          className="px-6 py-3 bg-red-600 text-white rounded-2xl font-semibold hover:scale-105 hover:shadow-xl transition"
-        >
-          Delete Account
-        </button>
-      </section>
+        {/* Save Bar */}
+        <div className="flex items-center justify-between">
+          <button
+            onClick={handleSave}
+            className="px-6 py-2.5 bg-slate-900 hover:bg-blue-600 text-white rounded-xl text-xs font-bold shadow-md transition hover:scale-[1.02]"
+          >
+            Save Preferences
+          </button>
 
-      <Link
-        href="/dashboard"
-        className="fixed bottom-6 left-1/2 transform -translate-x-1/2 px-8 py-3 bg-gradient-to-r from-white-600 to-purple-600 text-white rounded-full font-semibold shadow-2xl hover:scale-110 hover:shadow-indigo-500/50 transition-all duration-300 flex items-center gap-2 animate-bounceSlow"
-      >
-        <FiArrowLeft /> Back to Dashboard
-      </Link>
-
-      <style jsx>{`
-        @keyframes fadeIn {
-          0% {
-            opacity: 0;
-            transform: translateY(-10px);
-          }
-          100% {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-fadeIn {
-          animation: fadeIn 1s forwards;
-        }
-
-        @keyframes bounceSlow {
-          0%,
-          100% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(-6px);
-          }
-        }
-        .animate-bounceSlow {
-          animation: bounceSlow 2s infinite;
-        }
-      `}</style>
+          {saved && (
+            <span className="text-xs font-bold text-emerald-600 flex items-center gap-1.5 animate-fadeIn">
+              <FiCheck size={16} /> Preferences updated!
+            </span>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
-
